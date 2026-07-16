@@ -35,5 +35,11 @@ public:
     void setFirstName(const std::string &first);
     void setMiddleName(const std::string &middle);
     void setLastName(const std::string &last);
+    void setPhone(const std::string &phone);
+    void setAddress(const std::string &addr);
+    void setPassport(const std::string &pass);
+    void setAvtoModel(const std::string &model);
+    void setAvtoNumber(const std::string &avto_num);
     void setDiscount(const bool discount);
+    void setRetired(const bool isRetired);
 };

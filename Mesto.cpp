@@ -51,6 +51,16 @@ void Mesto::setLastName(const std::string &last)
     last_name = last;
 }
 
+void Mesto::setPhone(const std::string &phone)
+{
+    phone_number = phone;
+}
+
+void Mesto::setAddress(const std::string &addr)
+{
+    address = addr;
+}
+
 void Mesto::setDiscount(bool isDiscount)
 {
     discount = isDiscount;
