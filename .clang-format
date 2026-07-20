@@ -1,0 +1,6 @@
+BasedOnStyle: Microsoft
+IndentWidth: 4
+ColumnLimit: 120
+AccessModifierOffset: -4
+PointerAlignment: Right
+BreakBeforeBraces: Allman
