@@ -1,5 +1,6 @@
 // Mesto.cpp
 #include "Mesto.h"
+#include <string>
 
 // Конструктор, соответствующий .h
 Mesto::Mesto(int place_id, std::string first, std::string middle,
@@ -14,19 +15,26 @@ Mesto::Mesto(int place_id, std::string first, std::string middle,
 Mesto::~Mesto() {}
 
 // Геттер просто возвращает значение
-int Mesto::getId() const {
-  return id; // Просто возвращаем поле
-}
-
+int Mesto::getId() const { return id; }
+const std::string &Mesto::getFirstName() const { return first_name; }
+const std::string &Mesto::getMiddleName() const { return middle_name; }
+const std::string &Mesto::getLastName() const { return last_name; }
+const std::string &Mesto::getPhoneNumber() const { return phone_number; }
+const std::string &Mesto::getAddress() const { return address; }
+const std::string &Mesto::getPassport() const { return passport; }
+const std::string &Mesto::getAvtoModel() const { return avto_model; }
+const std::string &Mesto::getAvtoNumber() const { return avto_number; }
 int Mesto::getBaseMonthlyPayment() const { return (id <= 150) ? 1300 : 2000; }
-
 int Mesto::getFinalPayment() const {
   return discount ? getBaseMonthlyPayment() * 0.8 : getBaseMonthlyPayment();
 }
-
-void Mesto::setBalance(const int balance) { spot_balance = balance; }
+int Mesto::getBalance() const { return spot_balance; }
+bool Mesto::getRetired() const { return retired; }
+bool Mesto::getDiscount() const { return discount; }
 
 // Сеттеры
+void Mesto::setBalance(const int balance) { spot_balance = balance; }
+
 void Mesto::setFirstName(const std::string &first) { first_name = first; }
 
 void Mesto::setMiddleName(const std::string &middle) { middle_name = middle; }
