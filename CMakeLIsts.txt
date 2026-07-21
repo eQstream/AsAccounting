@@ -1,16 +1,23 @@
 cmake_minimum_required(VERSION 3.15)
 project(AsAccounting VERSION 1.0.0 LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(CMAKE_PREFIX_PATH "C:/msys64/mingw64/qt6-static")
+find_package(Qt6 REQUIRED COMPONENTS Core Sql Widgets)
+
 set(SOURCES
     main.cpp
     Mesto.cpp
+    Database.cpp
 )
 
 add_executable(asaccounting ${SOURCES})
 target_include_directories(asaccounting PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_compile_features(asaccounting PRIVATE cxx_std_17)
+target_link_libraries(asaccounting PRIVATE Qt6::Core Qt6::Sql Qt6::Widgets)
 
-# Для MinGW — установить флаг UTF-8
 if(MINGW)
     target_compile_options(asaccounting PRIVATE -fexec-charset=UTF-8)
 endif()
