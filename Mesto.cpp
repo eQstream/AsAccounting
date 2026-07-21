@@ -66,10 +66,6 @@ const std::string &Mesto::getBirthDate() const
 {
     return birth_date;
 }
-const std::string &Mesto::getPassport() const
-{
-    return passport_series;
-}
 const std::string &Mesto::getPassportSeries() const
 {
     return passport_series;
@@ -91,10 +87,6 @@ const std::string &Mesto::getPassportIssueDate() const
 // Адреса
 // ============================================================================
 
-const std::string &Mesto::getAddress() const
-{
-    return registration_address;
-}
 const std::string &Mesto::getRegistrationAddress() const
 {
     return registration_address;
@@ -108,10 +100,6 @@ const std::string &Mesto::getActualAddress() const
 // Телефоны
 // ============================================================================
 
-const std::string &Mesto::getPhoneNumber() const
-{
-    return phone1;
-}
 const std::string &Mesto::getPhone1() const
 {
     return phone1;
@@ -142,14 +130,6 @@ const std::string &Mesto::getMgsaTicketIssueDate() const
 // Автомобиль
 // ============================================================================
 
-const std::string &Mesto::getAvtoModel() const
-{
-    return vehicle_brand;
-}
-const std::string &Mesto::getAvtoNumber() const
-{
-    return vehicle_plate;
-}
 const std::string &Mesto::getVehicleBrand() const
 {
     return vehicle_brand;
@@ -167,14 +147,6 @@ int Mesto::getVehicleYear() const
 // Статус
 // ============================================================================
 
-bool Mesto::getRetired() const
-{
-    return pensioner;
-}
-bool Mesto::getDiscount() const
-{
-    return disabled;
-}
 bool Mesto::isPensioner() const
 {
     return pensioner;
@@ -188,10 +160,6 @@ bool Mesto::isDisabled() const
 // Баланс
 // ============================================================================
 
-int Mesto::getBalance() const
-{
-    return spot_balance;
-}
 int Mesto::getSpotBalance() const
 {
     return spot_balance;
@@ -212,7 +180,7 @@ const std::string &Mesto::getNotes() const
 
 int Mesto::getBaseMonthlyPayment() const
 {
-    return 1500;
+    return 1300;
 }
 
 int Mesto::getFinalPayment() const
@@ -252,10 +220,6 @@ void Mesto::setBirthDate(const std::string &value)
 {
     birth_date = value;
 }
-void Mesto::setPassport(const std::string &value)
-{
-    passport_series = value;
-}
 void Mesto::setPassportSeries(const std::string &value)
 {
     passport_series = value;
@@ -277,10 +241,6 @@ void Mesto::setPassportIssueDate(const std::string &value)
 // Адреса (сеттеры)
 // ============================================================================
 
-void Mesto::setAddress(const std::string &value)
-{
-    registration_address = value;
-}
 void Mesto::setRegistrationAddress(const std::string &value)
 {
     registration_address = value;
@@ -294,10 +254,6 @@ void Mesto::setActualAddress(const std::string &value)
 // Телефоны (сеттеры)
 // ============================================================================
 
-void Mesto::setPhone(const std::string &value)
-{
-    phone1 = value;
-}
 void Mesto::setPhone1(const std::string &value)
 {
     phone1 = value;
@@ -328,14 +284,6 @@ void Mesto::setMgsaTicketIssueDate(const std::string &value)
 // Автомобиль (сеттеры)
 // ============================================================================
 
-void Mesto::setAvtoModel(const std::string &value)
-{
-    vehicle_brand = value;
-}
-void Mesto::setAvtoNumber(const std::string &value)
-{
-    vehicle_plate = value;
-}
 void Mesto::setVehicleBrand(const std::string &value)
 {
     vehicle_brand = value;
@@ -353,10 +301,6 @@ void Mesto::setVehicleYear(int value)
 // Статус (сеттеры)
 // ============================================================================
 
-void Mesto::setDiscount(bool value)
-{
-    disabled = value;
-}
 void Mesto::setPensioner(bool value)
 {
     pensioner = value;
@@ -370,10 +314,6 @@ void Mesto::setDisabled(bool value)
 // Баланс (сеттеры)
 // ============================================================================
 
-void Mesto::setBalance(int value)
-{
-    spot_balance = value;
-}
 void Mesto::setSpotBalance(int value)
 {
     spot_balance = value;
