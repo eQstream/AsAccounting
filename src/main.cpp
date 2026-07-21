@@ -1,9 +1,10 @@
 // main.cpp
-#include "Database.h"
 #include "Mesto.h"
+#include "database/Database.h"
 #include <QApplication>
 #include <iostream>
 #include <windows.h>
+
 
 int main(int argc, char *argv[])
 {

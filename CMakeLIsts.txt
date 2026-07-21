@@ -9,13 +9,13 @@ set(CMAKE_PREFIX_PATH "C:/msys64/mingw64/qt6-static")
 find_package(Qt6 REQUIRED COMPONENTS Core Sql Widgets)
 
 set(SOURCES
-    main.cpp
-    Mesto.cpp
-    Database.cpp
+    src/main.cpp
+    src/Mesto.cpp
+    src/database/Database.cpp
 )
 
 add_executable(asaccounting ${SOURCES})
-target_include_directories(asaccounting PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(asaccounting PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(asaccounting PRIVATE Qt6::Core Qt6::Sql Qt6::Widgets)
 
 if(MINGW)
