@@ -47,12 +47,10 @@ public:
     const std::string &getBirthDate() const;
 
     // Адреса
-    const std::string &getAddress() const; // основной (registration)
     const std::string &getRegistrationAddress() const;
     const std::string &getActualAddress() const;
 
     // Телефоны
-    const std::string &getPhoneNumber() const; // основной (phone1)
     const std::string &getPhone1() const;
     const std::string &getPhone2() const;
     const std::string &getPhone3() const;
@@ -62,27 +60,21 @@ public:
     const std::string &getMgsaTicketIssueDate() const;
 
     // Паспорт
-    const std::string &getPassport() const; // серия (для совместимости)
     const std::string &getPassportSeries() const;
     const std::string &getPassportNumber() const;
     const std::string &getPassportIssuedBy() const;
     const std::string &getPassportIssueDate() const;
 
     // Автомобиль
-    const std::string &getAvtoModel() const;  // для совместимости
-    const std::string &getAvtoNumber() const; // для совместимости
     const std::string &getVehicleBrand() const;
     const std::string &getVehiclePlate() const;
     int getVehicleYear() const;
 
     // Статус
-    bool getRetired() const;  // для совместимости
-    bool getDiscount() const; // для совместимости
     bool isPensioner() const;
     bool isDisabled() const;
 
     // Баланс
-    int getBalance() const; // для совместимости
     int getSpotBalance() const;
 
     // Прочее
@@ -105,12 +97,10 @@ public:
     void setBirthDate(const std::string &value);
 
     // Адреса
-    void setAddress(const std::string &value); // основной
     void setRegistrationAddress(const std::string &value);
     void setActualAddress(const std::string &value);
 
     // Телефоны
-    void setPhone(const std::string &value); // основной (phone1)
     void setPhone1(const std::string &value);
     void setPhone2(const std::string &value);
     void setPhone3(const std::string &value);
@@ -120,27 +110,21 @@ public:
     void setMgsaTicketIssueDate(const std::string &value);
 
     // Паспорт
-    void setPassport(const std::string &value); // серия (для совместимости)
     void setPassportSeries(const std::string &value);
     void setPassportNumber(const std::string &value);
     void setPassportIssuedBy(const std::string &value);
     void setPassportIssueDate(const std::string &value);
 
     // Автомобиль
-    void setAvtoModel(const std::string &value);  // для совместимости
-    void setAvtoNumber(const std::string &value); // для совместимости
     void setVehicleBrand(const std::string &value);
     void setVehiclePlate(const std::string &value);
     void setVehicleYear(int value);
 
     // Статус
-    void setRetired(bool value);  // для совместимости
-    void setDiscount(bool value); // для совместимости
     void setPensioner(bool value);
     void setDisabled(bool value);
 
     // Баланс
-    void setBalance(int value); // для совместимости
     void setSpotBalance(int value);
 
     // Прочее

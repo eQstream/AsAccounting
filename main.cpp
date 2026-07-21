@@ -30,9 +30,9 @@ int main(int argc, char *argv[])
 
     int id;
     std::cout << "Введите номер места: " << std::endl;
-    std::cin >> id;
-    Mesto Spot(id);
-    std::cout << "Номер места: " << Spot.getId() << std::endl;
+    std::cin >> place;
+    Mesto Spot(place);
+    std::cout << "Номер места: " << Spot.getPlace() << std::endl;
     app.quit();
     return 0;
 }
