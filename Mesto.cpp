@@ -219,14 +219,9 @@ int Mesto::getFinalPayment() const
 {
     int payment = getBaseMonthlyPayment();
 
-    if (pensioner)
-    {
-        payment = static_cast<int>(payment * 0.7);
-    }
-
     if (disabled)
     {
-        payment = static_cast<int>(payment * 0.5);
+        payment = static_cast<int>(payment * 0.8);
     }
 
     return payment;
@@ -358,10 +353,6 @@ void Mesto::setVehicleYear(int value)
 // Статус (сеттеры)
 // ============================================================================
 
-void Mesto::setRetired(bool value)
-{
-    pensioner = value;
-}
 void Mesto::setDiscount(bool value)
 {
     disabled = value;
