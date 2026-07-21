@@ -4,47 +4,145 @@
 class Mesto
 {
 private:
-    int id; // Нмер места
-    std::string first_name;
-    std::string middle_name;
-    std::string last_name;
-    std::string phone_number;
-    std::string address;
-    std::string passport;
-    std::string avto_model;
-    std::string avto_number;
+    int place;               // Номер места
+    std::string last_name;   // Фамилия
+    std::string first_name;  // Имя
+    std::string middle_name; // Отчество
+    std::string birth_date;
+    std::string registration_address;
+    std::string actual_address;
+    std::string phone1;
+    std::string phone2;
+    std::string phone3;
+    std::string mgsa_ticket_number;
+    std::string mgsa_ticket_issue_date;
+    std::string passport_series;
+    std::string passport_number;
+    std::string passport_issued_by;
+    std::string passport_issue_date;
+    std::string vehicle_brand;
+    std::string vehicle_plate;
+    int vehicle_year;
+    bool pensioner;
+    bool disabled;
+    std::string notes;
     int spot_balance;
-    bool retired;
-    bool discount; // имеет ли право на льготы
 
 public:
+    // Конструктор / Деструктор
     Mesto(int place_id, std::string first = "", std::string middle = "", std::string last = "", std::string phone = "",
           std::string addr = "", std::string pass = "", std::string model = "", std::string avto_num = "",
           int balance = 0, bool isRetired = false, bool isDiscount = false);
     ~Mesto();
-    int getId() const;
+
+    // Основные данные
+    int getPlace() const;
+
+    // ФИО
+    const std::string &getLastName() const;
     const std::string &getFirstName() const;
     const std::string &getMiddleName() const;
-    const std::string &getLastName() const;
-    const std::string &getPhoneNumber() const;
-    const std::string &getAddress() const;
-    const std::string &getPassport() const;
-    const std::string &getAvtoModel() const;
-    const std::string &getAvtoNumber() const;
+
+    // Дата рождения
+    const std::string &getBirthDate() const;
+
+    // Адреса
+    const std::string &getAddress() const; // основной (registration)
+    const std::string &getRegistrationAddress() const;
+    const std::string &getActualAddress() const;
+
+    // Телефоны
+    const std::string &getPhoneNumber() const; // основной (phone1)
+    const std::string &getPhone1() const;
+    const std::string &getPhone2() const;
+    const std::string &getPhone3() const;
+
+    // МГСА
+    const std::string &getMgsaTicketNumber() const;
+    const std::string &getMgsaTicketIssueDate() const;
+
+    // Паспорт
+    const std::string &getPassport() const; // серия (для совместимости)
+    const std::string &getPassportSeries() const;
+    const std::string &getPassportNumber() const;
+    const std::string &getPassportIssuedBy() const;
+    const std::string &getPassportIssueDate() const;
+
+    // Автомобиль
+    const std::string &getAvtoModel() const;  // для совместимости
+    const std::string &getAvtoNumber() const; // для совместимости
+    const std::string &getVehicleBrand() const;
+    const std::string &getVehiclePlate() const;
+    int getVehicleYear() const;
+
+    // Статус
+    bool getRetired() const;  // для совместимости
+    bool getDiscount() const; // для совместимости
+    bool isPensioner() const;
+    bool isDisabled() const;
+
+    // Баланс
+    int getBalance() const; // для совместимости
+    int getSpotBalance() const;
+
+    // Прочее
+    const std::string &getNotes() const;
+
+    // Расчёт оплаты
     int getBaseMonthlyPayment() const;
     int getFinalPayment() const;
-    int getBalance() const;
-    bool getRetired() const;
-    bool getDiscount() const;
-    void setFirstName(const std::string &first);
-    void setMiddleName(const std::string &middle);
-    void setLastName(const std::string &last);
-    void setPhone(const std::string &phone);
-    void setAddress(const std::string &addr);
-    void setPassport(const std::string &pass);
-    void setAvtoModel(const std::string &model);
-    void setAvtoNumber(const std::string &avto_num);
-    void setBalance(const int balance);
-    void setRetired(const bool isRetired);
-    void setDiscount(const bool discount);
+
+    // ========================================================================
+    // Сеттеры
+    // ========================================================================
+
+    // ФИО
+    void setLastName(const std::string &value);
+    void setFirstName(const std::string &value);
+    void setMiddleName(const std::string &value);
+
+    // Дата рождения
+    void setBirthDate(const std::string &value);
+
+    // Адреса
+    void setAddress(const std::string &value); // основной
+    void setRegistrationAddress(const std::string &value);
+    void setActualAddress(const std::string &value);
+
+    // Телефоны
+    void setPhone(const std::string &value); // основной (phone1)
+    void setPhone1(const std::string &value);
+    void setPhone2(const std::string &value);
+    void setPhone3(const std::string &value);
+
+    // МГСА
+    void setMgsaTicketNumber(const std::string &value);
+    void setMgsaTicketIssueDate(const std::string &value);
+
+    // Паспорт
+    void setPassport(const std::string &value); // серия (для совместимости)
+    void setPassportSeries(const std::string &value);
+    void setPassportNumber(const std::string &value);
+    void setPassportIssuedBy(const std::string &value);
+    void setPassportIssueDate(const std::string &value);
+
+    // Автомобиль
+    void setAvtoModel(const std::string &value);  // для совместимости
+    void setAvtoNumber(const std::string &value); // для совместимости
+    void setVehicleBrand(const std::string &value);
+    void setVehiclePlate(const std::string &value);
+    void setVehicleYear(int value);
+
+    // Статус
+    void setRetired(bool value);  // для совместимости
+    void setDiscount(bool value); // для совместимости
+    void setPensioner(bool value);
+    void setDisabled(bool value);
+
+    // Баланс
+    void setBalance(int value); // для совместимости
+    void setSpotBalance(int value);
+
+    // Прочее
+    void setNotes(const std::string &value);
 };

@@ -4,7 +4,6 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
-
 Database::Database(const QString &path) : db_path(path)
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
@@ -55,18 +54,29 @@ bool Database::createTables()
 {
     QString sql = R"(
         CREATE TABLE IF NOT EXISTS mesto (
-            id INTEGER PRIMARY KEY,
-            first_name TEXT NOT NULL,
-            middle_name TEXT DEFAULT '',
-            last_name TEXT NOT NULL,
-            phone_number TEXT DEFAULT '',
-            address TEXT DEFAULT '',
-            passport TEXT DEFAULT '',
-            avto_model TEXT DEFAULT '',
-            avto_number TEXT DEFAULT '',
-            spot_balance INTEGER DEFAULT 0,
-            retired INTEGER DEFAULT 0,
-            discount INTEGER DEFAULT 0
+            id                      INTEGER PRIMARY KEY,
+            last_name               TEXT NOT NULL,
+            first_name              TEXT NOT NULL,
+            middle_name             TEXT DEFAULT '',
+            birth_date              TEXT DEFAULT '',
+            registration_address    TEXT DEFAULT '',
+            actual_address          TEXT DEFAULT '',
+            phone1                  TEXT DEFAULT '',
+            phone2                  TEXT DEFAULT '',
+            phone3                  TEXT DEFAULT '',
+            mgsa_ticket_number      TEXT DEFAULT '',
+            mgsa_ticket_issue_date  TEXT DEFAULT '',
+            passport_series         TEXT DEFAULT '',
+            passport_number         TEXT DEFAULT '',
+            passport_issued_by      TEXT DEFAULT '',
+            passport_issue_date     TEXT DEFAULT '',
+            vehicle_brand           TEXT DEFAULT '',
+            vehicle_plate           TEXT DEFAULT '',
+            vehicle_year            INTEGER DEFAULT 0,
+            pensioner               INTEGER DEFAULT 0,
+            disabled                INTEGER DEFAULT 0,
+            notes                   TEXT DEFAULT '',
+            spot_balance            INTEGER DEFAULT 0
         )
     )";
 
