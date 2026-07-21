@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     std::cout << "База данных готова к работе!" << std::endl;
 
-    int id;
+    int place;
     std::cout << "Введите номер места: " << std::endl;
     std::cin >> place;
     Mesto Spot(place);
