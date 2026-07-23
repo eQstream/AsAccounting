@@ -1,37 +1,37 @@
 #include "Mesto.h"
 
 // ============================================================================
-// Конструктор / Деструктор
+// Полный конструктор
 // ============================================================================
 
-Mesto::Mesto(int place_id, std::string first, std::string middle, std::string last, std::string phone, std::string addr,
-             std::string pass, std::string model, std::string avto_num, int balance, bool isRetired, bool isDiscount)
-    // Основные данные
-    : place(place_id), last_name(last), first_name(first), middle_name(middle)
-      // Документы
-      ,
-      birth_date(""), passport_series(pass), passport_number(""), passport_issued_by(""), passport_issue_date("")
-      // Адреса
-      ,
-      registration_address(addr), actual_address("")
-      // Телефоны
-      ,
-      phone1(phone), phone2(""), phone3("")
-      // МГСА
-      ,
-      mgsa_ticket_number(""), mgsa_ticket_issue_date("")
-      // Автомобиль
-      ,
-      vehicle_brand(model), vehicle_plate(avto_num), vehicle_year(0)
-      // Статус
-      ,
-      pensioner(isRetired), disabled(isDiscount)
-      // Баланс
-      ,
-      spot_balance(balance)
-      // Прочее
-      ,
-      notes("")
+Mesto::Mesto(int place, std::string last_name, std::string first_name, std::string middle_name, std::string birth_date,
+             std::string registration_address, std::string actual_address, std::string phone1, std::string phone2,
+             std::string phone3, std::string mgsa_ticket_number, std::string mgsa_ticket_issue_date,
+             std::string passport_series, std::string passport_number, std::string passport_issued_by,
+             std::string passport_issue_date, std::string vehicle_brand, std::string vehicle_plate, int vehicle_year,
+             bool pensioner, bool disabled, std::string notes, int spot_balance)
+    : place(place), last_name(std::move(last_name)), first_name(std::move(first_name)),
+      middle_name(std::move(middle_name)), birth_date(std::move(birth_date)),
+      registration_address(std::move(registration_address)), actual_address(std::move(actual_address)),
+      phone1(std::move(phone1)), phone2(std::move(phone2)), phone3(std::move(phone3)),
+      mgsa_ticket_number(std::move(mgsa_ticket_number)), mgsa_ticket_issue_date(std::move(mgsa_ticket_issue_date)),
+      passport_series(std::move(passport_series)), passport_number(std::move(passport_number)),
+      passport_issued_by(std::move(passport_issued_by)), passport_issue_date(std::move(passport_issue_date)),
+      vehicle_brand(std::move(vehicle_brand)), vehicle_plate(std::move(vehicle_plate)), vehicle_year(vehicle_year),
+      pensioner(pensioner), disabled(disabled), notes(std::move(notes)), spot_balance(spot_balance)
+{
+}
+
+// ============================================================================
+// Краткий конструктор — все поля по умолчанию, кроме места и ФИО
+// ============================================================================
+
+Mesto::Mesto(int place, std::string last_name, std::string first_name, std::string middle_name)
+    : place(place), last_name(std::move(last_name)), first_name(std::move(first_name)),
+      middle_name(std::move(middle_name)), birth_date(""), registration_address(""), actual_address(""), phone1(""),
+      phone2(""), phone3(""), mgsa_ticket_number(""), mgsa_ticket_issue_date(""), passport_series(""),
+      passport_number(""), passport_issued_by(""), passport_issue_date(""), vehicle_brand(""), vehicle_plate(""),
+      vehicle_year(0), pensioner(false), disabled(false), notes(""), spot_balance(0)
 {
 }
 
@@ -82,6 +82,14 @@ const std::string &Mesto::getPassportIssueDate() const
 {
     return passport_issue_date;
 }
+const std::string &Mesto::getMgsaTicketNumber() const
+{
+    return mgsa_ticket_number;
+}
+const std::string &Mesto::getMgsaTicketIssueDate() const
+{
+    return mgsa_ticket_issue_date;
+}
 
 // ============================================================================
 // Адреса
@@ -111,19 +119,6 @@ const std::string &Mesto::getPhone2() const
 const std::string &Mesto::getPhone3() const
 {
     return phone3;
-}
-
-// ============================================================================
-// МГСА
-// ============================================================================
-
-const std::string &Mesto::getMgsaTicketNumber() const
-{
-    return mgsa_ticket_number;
-}
-const std::string &Mesto::getMgsaTicketIssueDate() const
-{
-    return mgsa_ticket_issue_date;
 }
 
 // ============================================================================
@@ -157,36 +152,32 @@ bool Mesto::isDisabled() const
 }
 
 // ============================================================================
-// Баланс
+// Баланс и заметки
 // ============================================================================
 
 int Mesto::getSpotBalance() const
 {
     return spot_balance;
 }
-
-// ============================================================================
-// Прочее
-// ============================================================================
-
 const std::string &Mesto::getNotes() const
 {
     return notes;
 }
 
 // ============================================================================
-// Расчет оплаты
+// Бизнес-логика оплаты
 // ============================================================================
 
 int Mesto::getBaseMonthlyPayment() const
 {
-    return 1300;
+    return 1300; // Фиксированная ставка
 }
 
 int Mesto::getFinalPayment() const
 {
     int payment = getBaseMonthlyPayment();
 
+    // Скидка 20% для инвалидов
     if (disabled)
     {
         payment = static_cast<int>(payment * 0.8);
@@ -196,7 +187,7 @@ int Mesto::getFinalPayment() const
 }
 
 // ============================================================================
-// Основные сеттеры
+// Сеттеры — ФИО
 // ============================================================================
 
 void Mesto::setLastName(const std::string &value)
@@ -213,7 +204,7 @@ void Mesto::setMiddleName(const std::string &value)
 }
 
 // ============================================================================
-// Документы (сеттеры)
+// Сеттеры — Документы
 // ============================================================================
 
 void Mesto::setBirthDate(const std::string &value)
@@ -236,9 +227,17 @@ void Mesto::setPassportIssueDate(const std::string &value)
 {
     passport_issue_date = value;
 }
+void Mesto::setMgsaTicketNumber(const std::string &value)
+{
+    mgsa_ticket_number = value;
+}
+void Mesto::setMgsaTicketIssueDate(const std::string &value)
+{
+    mgsa_ticket_issue_date = value;
+}
 
 // ============================================================================
-// Адреса (сеттеры)
+// Сеттеры — Адреса
 // ============================================================================
 
 void Mesto::setRegistrationAddress(const std::string &value)
@@ -251,7 +250,7 @@ void Mesto::setActualAddress(const std::string &value)
 }
 
 // ============================================================================
-// Телефоны (сеттеры)
+// Сеттеры — Телефоны
 // ============================================================================
 
 void Mesto::setPhone1(const std::string &value)
@@ -268,20 +267,7 @@ void Mesto::setPhone3(const std::string &value)
 }
 
 // ============================================================================
-// МГСА (сеттеры)
-// ============================================================================
-
-void Mesto::setMgsaTicketNumber(const std::string &value)
-{
-    mgsa_ticket_number = value;
-}
-void Mesto::setMgsaTicketIssueDate(const std::string &value)
-{
-    mgsa_ticket_issue_date = value;
-}
-
-// ============================================================================
-// Автомобиль (сеттеры)
+// Сеттеры — Автомобиль
 // ============================================================================
 
 void Mesto::setVehicleBrand(const std::string &value)
@@ -298,7 +284,7 @@ void Mesto::setVehicleYear(int value)
 }
 
 // ============================================================================
-// Статус (сеттеры)
+// Сеттеры — Статус
 // ============================================================================
 
 void Mesto::setPensioner(bool value)
@@ -311,18 +297,13 @@ void Mesto::setDisabled(bool value)
 }
 
 // ============================================================================
-// Баланс (сеттеры)
+// Сеттеры — Баланс и заметки
 // ============================================================================
 
 void Mesto::setSpotBalance(int value)
 {
     spot_balance = value;
 }
-
-// ============================================================================
-// Прочее (сеттеры)
-// ============================================================================
-
 void Mesto::setNotes(const std::string &value)
 {
     notes = value;
