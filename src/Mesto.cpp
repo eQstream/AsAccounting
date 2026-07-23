@@ -62,6 +62,8 @@ const std::string &Mesto::getMiddleName() const
 // Документы
 // ============================================================================
 
+/// @brief Дата рождения владельца машиноместа.
+/// @return Дата рождения.
 const std::string &Mesto::getBirthDate() const
 {
     return birth_date;
