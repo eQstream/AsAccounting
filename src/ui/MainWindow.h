@@ -1,7 +1,9 @@
 // src/ui/MainWindow.h
 #pragma once
+#include "domain/User.h"
 #include <QMainWindow>
 #include <QStringList>
+
 
 class QTabWidget;
 class QTableWidget;
@@ -9,19 +11,15 @@ class QPushButton;
 class QLineEdit;
 class QMenu;
 class SpotService;
+class AuthService;
 
-/// @brief Главное окно приложения с вкладками "Учёт" и "Бухгалтерия".
-///
-/// Вкладка "Учёт" содержит таблицу машиномест, кнопки управления,
-/// поиск по таблице и контекстное меню.
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    /// @param spotService Сервис для работы с местами
-    /// @param parent Родительский виджет
-    explicit MainWindow(SpotService &spotService, QWidget *parent = nullptr);
+    explicit MainWindow(SpotService &spotService, AuthService &authService, Role role, const QString &login,
+                        QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
@@ -29,6 +27,7 @@ private slots:
     void onEditSpot();
     void onDeleteSpot();
     void onImportCsv();
+    void onChangePassword();
     void onTableDoubleClicked(int row, int column);
     void onSearchTextChanged(const QString &text);
     void onTableContextMenu(const QPoint &pos);
@@ -44,6 +43,9 @@ private:
     static QStringList parseCsvLine(const QString &line);
 
     SpotService &spotService;
+    AuthService &authService;
+    Role userRole;
+    QString userLogin;
 
     QTabWidget *tabWidget;
     QTableWidget *spotTable;
@@ -52,5 +54,6 @@ private:
     QPushButton *btnEdit;
     QPushButton *btnDelete;
     QPushButton *btnImportCsv;
+    QPushButton *btnChangePassword;
     QMenu *contextMenu;
 };

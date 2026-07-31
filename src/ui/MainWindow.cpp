@@ -1,8 +1,10 @@
 // src/ui/MainWindow.cpp
 #include "ui/MainWindow.h"
 #include "application/SpotService.h"
+#include "domain/AuthService.h"
 #include "domain/Owner.h"
 #include "domain/Spot.h"
+#include "ui/LoginDialog.h"
 #include "ui/SpotDialog.h"
 #include <QFileDialog>
 #include <QHBoxLayout>
@@ -17,13 +19,11 @@
 #include <QVBoxLayout>
 
 
-// ============================================================================
-// Конструктор / Деструктор
-// ============================================================================
-
-MainWindow::MainWindow(SpotService &spotService, QWidget *parent)
-    : QMainWindow(parent), spotService(spotService), tabWidget(nullptr), spotTable(nullptr), searchEdit(nullptr),
-      btnAdd(nullptr), btnEdit(nullptr), btnDelete(nullptr), btnImportCsv(nullptr), contextMenu(nullptr)
+MainWindow::MainWindow(SpotService &spotService, AuthService &authService, Role role, const QString &login,
+                       QWidget *parent)
+    : QMainWindow(parent), spotService(spotService), authService(authService), userRole(role), userLogin(login),
+      tabWidget(nullptr), spotTable(nullptr), searchEdit(nullptr), btnAdd(nullptr), btnEdit(nullptr),
+      btnDelete(nullptr), btnImportCsv(nullptr), btnChangePassword(nullptr), contextMenu(nullptr)
 {
     setWindowTitle("Гаражный учёт");
     resize(1000, 650);
@@ -33,10 +33,6 @@ MainWindow::MainWindow(SpotService &spotService, QWidget *parent)
 
 MainWindow::~MainWindow() = default;
 
-// ============================================================================
-// Построение интерфейса
-// ============================================================================
-
 void MainWindow::setupUi()
 {
     tabWidget = new QTabWidget(this);
@@ -45,10 +41,6 @@ void MainWindow::setupUi()
     tabWidget->addTab(createAccountingTab(), "Учёт");
     tabWidget->addTab(createBookkeepingTab(), "Бухгалтерия");
 }
-
-// ============================================================================
-// Вкладка "Учёт"
-// ============================================================================
 
 QWidget *MainWindow::createAccountingTab()
 {
@@ -62,15 +54,24 @@ QWidget *MainWindow::createAccountingTab()
     searchEdit->setClearButtonEnabled(true);
     topPanel->addWidget(searchEdit, 1);
 
+    bool isAdmin = (userRole == Role::Admin);
+
     btnAdd = new QPushButton("Добавить");
     btnEdit = new QPushButton("Редактировать");
     btnDelete = new QPushButton("Удалить");
     btnImportCsv = new QPushButton("Импорт CSV");
+    btnChangePassword = new QPushButton("Сменить пароль");
+
+    btnAdd->setVisible(isAdmin);
+    btnEdit->setVisible(isAdmin);
+    btnDelete->setVisible(isAdmin);
+    btnImportCsv->setVisible(isAdmin);
 
     topPanel->addWidget(btnAdd);
     topPanel->addWidget(btnEdit);
     topPanel->addWidget(btnDelete);
     topPanel->addWidget(btnImportCsv);
+    topPanel->addWidget(btnChangePassword);
 
     mainLayout->addLayout(topPanel);
 
@@ -83,28 +84,28 @@ QWidget *MainWindow::createAccountingTab()
     spotTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     spotTable->setAlternatingRowColors(true);
     spotTable->verticalHeader()->setVisible(false);
-    spotTable->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    if (isAdmin)
+    {
+        spotTable->setContextMenuPolicy(Qt::CustomContextMenu);
+        contextMenu = new QMenu(this);
+        contextMenu->addAction("Редактировать", this, &MainWindow::onEditSpot);
+        contextMenu->addAction("Удалить", this, &MainWindow::onDeleteSpot);
+        connect(spotTable, &QTableWidget::customContextMenuRequested, this, &MainWindow::onTableContextMenu);
+    }
 
     mainLayout->addWidget(spotTable);
-
-    contextMenu = new QMenu(this);
-    contextMenu->addAction("Редактировать", this, &MainWindow::onEditSpot);
-    contextMenu->addAction("Удалить", this, &MainWindow::onDeleteSpot);
 
     connect(searchEdit, &QLineEdit::textChanged, this, &MainWindow::onSearchTextChanged);
     connect(btnAdd, &QPushButton::clicked, this, &MainWindow::onAddSpot);
     connect(btnEdit, &QPushButton::clicked, this, &MainWindow::onEditSpot);
     connect(btnDelete, &QPushButton::clicked, this, &MainWindow::onDeleteSpot);
     connect(btnImportCsv, &QPushButton::clicked, this, &MainWindow::onImportCsv);
+    connect(btnChangePassword, &QPushButton::clicked, this, &MainWindow::onChangePassword);
     connect(spotTable, &QTableWidget::cellDoubleClicked, this, &MainWindow::onTableDoubleClicked);
-    connect(spotTable, &QTableWidget::customContextMenuRequested, this, &MainWindow::onTableContextMenu);
 
     return tab;
 }
-
-// ============================================================================
-// Вкладка "Бухгалтерия" (заглушка)
-// ============================================================================
 
 QWidget *MainWindow::createBookkeepingTab()
 {
@@ -115,10 +116,6 @@ QWidget *MainWindow::createBookkeepingTab()
     layout->addWidget(label);
     return tab;
 }
-
-// ============================================================================
-// Заполнение таблицы
-// ============================================================================
 
 void MainWindow::refreshTable()
 {
@@ -150,10 +147,6 @@ void MainWindow::refreshTable()
     applyFilter();
 }
 
-// ============================================================================
-// Фильтрация
-// ============================================================================
-
 void MainWindow::onSearchTextChanged(const QString &text)
 {
     Q_UNUSED(text);
@@ -182,12 +175,11 @@ void MainWindow::applyFilter()
     }
 }
 
-// ============================================================================
-// Контекстное меню
-// ============================================================================
-
 void MainWindow::onTableContextMenu(const QPoint &pos)
 {
+    if (userRole != Role::Admin)
+        return;
+
     QTableWidgetItem *item = spotTable->itemAt(pos);
     if (!item)
         return;
@@ -195,10 +187,6 @@ void MainWindow::onTableContextMenu(const QPoint &pos)
     spotTable->selectRow(item->row());
     contextMenu->popup(spotTable->viewport()->mapToGlobal(pos));
 }
-
-// ============================================================================
-// Слоты
-// ============================================================================
 
 void MainWindow::onAddSpot()
 {
@@ -273,6 +261,12 @@ void MainWindow::onImportCsv()
                                  .arg(result.skipped));
 }
 
+void MainWindow::onChangePassword()
+{
+    LoginDialog dialog(authService, this);
+    dialog.changePasswordForUser(userLogin);
+}
+
 void MainWindow::onTableDoubleClicked(int row, int /*column*/)
 {
     int id = spotTable->item(row, 0)->text().toInt();
@@ -284,10 +278,6 @@ void MainWindow::onTableDoubleClicked(int row, int /*column*/)
     dialog.setReadOnly(true);
     dialog.exec();
 }
-
-// ============================================================================
-// Вспомогательный метод
-// ============================================================================
 
 QStringList MainWindow::parseCsvLine(const QString &line)
 {

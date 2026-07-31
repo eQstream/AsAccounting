@@ -20,6 +20,7 @@ set(SOURCES
     src/application/SpotService.cpp
     src/ui/MainWindow.cpp
     src/ui/SpotDialog.cpp
+    src/ui/LoginDialog.cpp
 )
 
 add_executable(asaccounting ${SOURCES})

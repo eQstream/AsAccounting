@@ -22,11 +22,9 @@ void SqliteUserRepository::initialize()
         )
     )");
 
-    // Создаём пользователей по умолчанию, если таблица пуста
     query.exec("SELECT COUNT(*) FROM users");
     if (query.next() && query.value(0).toInt() == 0)
     {
-        // Пароль 1234 с солью
         QSqlQuery insert(db);
         insert.prepare("INSERT INTO users (login, password_hash, role, change_password) "
                        "VALUES (:login, :hash, :role, :change)");
@@ -41,8 +39,7 @@ void SqliteUserRepository::initialize()
         };
 
         // SHA256("1234" + "MGSASalt2024")
-        // TODO: вычислить реальный хеш, пока заглушка
-        QString defaultHash = "PLACEHOLDER_SHA256_HASH";
+        QString defaultHash = "fc39ec7be99c5b33c3f45a04acbea4b6211c7560aab0c8d8d27830caf28bf119";
 
         addUser("Мурашов", defaultHash, "Admin", 1);
         addUser("Амелина", defaultHash, "Admin", 1);
