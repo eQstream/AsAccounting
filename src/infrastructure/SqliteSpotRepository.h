@@ -17,6 +17,10 @@ public:
     ~SqliteSpotRepository() override;
 
     std::optional<Spot> findById(int id) override;
+    QSqlDatabase &getDatabase()
+    {
+        return db;
+    }
     std::vector<Spot> findAll() override;
     void save(const Spot &spot) override;
     void remove(int id) override;
