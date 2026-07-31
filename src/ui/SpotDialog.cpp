@@ -1,66 +1,59 @@
-#include "ui/MestoDialog.h"
+// src/ui/SpotDialog.cpp
+#include "ui/SpotDialog.h"
+#include "domain/Owner.h"
 #include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QFormLayout>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLineEdit>
-#include <QPushButton>
 #include <QScrollArea>
 #include <QTextEdit>
 #include <QVBoxLayout>
 
 
 // ============================================================================
-// Конструктор для добавления нового места
+// Конструкторы
 // ============================================================================
 
-MestoDialog::MestoDialog(QWidget *parent) : QDialog(parent)
+SpotDialog::SpotDialog(QWidget *parent) : QDialog(parent)
 {
     setWindowTitle("Добавить машиноместо");
     setMinimumWidth(750);
     setupUi();
-    fillFromMesto(Mesto(-1));
+    fillFromSpot(Spot(-1));
 }
 
-// ============================================================================
-// Конструктор для редактирования существующего места
-// ============================================================================
-
-MestoDialog::MestoDialog(const Mesto &m, QWidget *parent) : QDialog(parent)
+SpotDialog::SpotDialog(const Spot &spot, QWidget *parent) : QDialog(parent)
 {
     setWindowTitle("Редактировать машиноместо");
     setMinimumWidth(750);
     setupUi();
-    fillFromMesto(m);
+    fillFromSpot(spot);
 }
 
 // ============================================================================
 // Построение UI — два столбца
 // ============================================================================
 
-void MestoDialog::setupUi()
+void SpotDialog::setupUi()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
-    // Область прокрутки на случай маленького экрана
     QScrollArea *scrollArea = new QScrollArea();
     scrollArea->setWidgetResizable(true);
     QWidget *scrollWidget = new QWidget();
     QHBoxLayout *columnsLayout = new QHBoxLayout(scrollWidget);
 
-    // ========================================================================
     // Левый столбец
-    // ========================================================================
     QVBoxLayout *leftColumn = new QVBoxLayout();
 
-    // --- Основные данные ---
     QGroupBox *groupMain = new QGroupBox("Основные данные");
     QFormLayout *formMain = new QFormLayout(groupMain);
 
-    editPlace = new QLineEdit();
-    editPlace->setPlaceholderText("Номер места");
-    formMain->addRow("№ места:", editPlace);
+    editId = new QLineEdit();
+    editId->setPlaceholderText("Номер места");
+    formMain->addRow("№ места:", editId);
 
     editLastName = new QLineEdit();
     formMain->addRow("Фамилия:", editLastName);
@@ -77,7 +70,6 @@ void MestoDialog::setupUi()
 
     leftColumn->addWidget(groupMain);
 
-    // --- Документы ---
     QGroupBox *groupDocs = new QGroupBox("Документы");
     QFormLayout *formDocs = new QFormLayout(groupDocs);
 
@@ -104,12 +96,9 @@ void MestoDialog::setupUi()
     leftColumn->addWidget(groupDocs);
     leftColumn->addStretch();
 
-    // ========================================================================
     // Правый столбец
-    // ========================================================================
     QVBoxLayout *rightColumn = new QVBoxLayout();
 
-    // --- Адреса ---
     QGroupBox *groupAddr = new QGroupBox("Адреса");
     QFormLayout *formAddr = new QFormLayout(groupAddr);
 
@@ -123,7 +112,6 @@ void MestoDialog::setupUi()
 
     rightColumn->addWidget(groupAddr);
 
-    // --- Контакты ---
     QGroupBox *groupContacts = new QGroupBox("Контакты");
     QFormLayout *formContacts = new QFormLayout(groupContacts);
 
@@ -138,7 +126,6 @@ void MestoDialog::setupUi()
 
     rightColumn->addWidget(groupContacts);
 
-    // --- Автомобиль ---
     QGroupBox *groupAuto = new QGroupBox("Автомобиль");
     QFormLayout *formAuto = new QFormLayout(groupAuto);
 
@@ -154,7 +141,6 @@ void MestoDialog::setupUi()
 
     rightColumn->addWidget(groupAuto);
 
-    // --- Статус ---
     QGroupBox *groupStatus = new QGroupBox("Статус");
     QHBoxLayout *layoutStatus = new QHBoxLayout(groupStatus);
 
@@ -166,7 +152,6 @@ void MestoDialog::setupUi()
 
     rightColumn->addWidget(groupStatus);
 
-    // --- Заметки ---
     QGroupBox *groupNotes = new QGroupBox("Заметки");
     QVBoxLayout *layoutNotes = new QVBoxLayout(groupNotes);
 
@@ -177,14 +162,12 @@ void MestoDialog::setupUi()
     rightColumn->addWidget(groupNotes);
     rightColumn->addStretch();
 
-    // Собираем столбцы
     columnsLayout->addLayout(leftColumn);
     columnsLayout->addLayout(rightColumn);
 
     scrollArea->setWidget(scrollWidget);
     mainLayout->addWidget(scrollArea);
 
-    // --- Кнопки ОК/Отмена ---
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -192,60 +175,63 @@ void MestoDialog::setupUi()
 }
 
 // ============================================================================
-// Заполнение полей из объекта Mesto
+// Заполнение полей
 // ============================================================================
 
-void MestoDialog::fillFromMesto(const Mesto &m)
+void SpotDialog::fillFromSpot(const Spot &spot)
 {
-    editPlace->setText(m.getPlace() > 0 ? QString::number(m.getPlace()) : "");
-    editLastName->setText(QString::fromStdString(m.getLastName()));
-    editFirstName->setText(QString::fromStdString(m.getFirstName()));
-    editMiddleName->setText(QString::fromStdString(m.getMiddleName()));
-    editBirthDate->setText(QString::fromStdString(m.getBirthDate()));
-    editRegistrationAddress->setPlainText(QString::fromStdString(m.getRegistrationAddress()));
-    editActualAddress->setPlainText(QString::fromStdString(m.getActualAddress()));
-    editPhone1->setText(QString::fromStdString(m.getPhone1()));
-    editPhone2->setText(QString::fromStdString(m.getPhone2()));
-    editPhone3->setText(QString::fromStdString(m.getPhone3()));
-    editMgsaTicketNumber->setText(QString::fromStdString(m.getMgsaTicketNumber()));
-    editMgsaTicketIssueDate->setText(QString::fromStdString(m.getMgsaTicketIssueDate()));
-    editPassportSeries->setText(QString::fromStdString(m.getPassportSeries()));
-    editPassportNumber->setText(QString::fromStdString(m.getPassportNumber()));
-    editPassportIssuedBy->setText(QString::fromStdString(m.getPassportIssuedBy()));
-    editPassportIssueDate->setText(QString::fromStdString(m.getPassportIssueDate()));
-    editVehicleBrand->setText(QString::fromStdString(m.getVehicleBrand()));
-    editVehiclePlate->setText(QString::fromStdString(m.getVehiclePlate()));
-    editVehicleYear->setText(m.getVehicleYear() != 0 ? QString::number(m.getVehicleYear()) : "");
-    checkPensioner->setChecked(m.isPensioner());
-    checkDisabled->setChecked(m.isDisabled());
-    editNotes->setPlainText(QString::fromStdString(m.getNotes()));
+    const Owner &o = spot.getOwner();
+
+    editId->setText(spot.getId() > 0 ? QString::number(spot.getId()) : "");
+    editLastName->setText(QString::fromStdString(o.getLastName()));
+    editFirstName->setText(QString::fromStdString(o.getFirstName()));
+    editMiddleName->setText(QString::fromStdString(o.getMiddleName()));
+    editBirthDate->setText(QString::fromStdString(o.getBirthDate()));
+    editRegistrationAddress->setPlainText(QString::fromStdString(o.getRegistrationAddress()));
+    editActualAddress->setPlainText(QString::fromStdString(o.getActualAddress()));
+    editPhone1->setText(QString::fromStdString(o.getPhone1()));
+    editPhone2->setText(QString::fromStdString(o.getPhone2()));
+    editPhone3->setText(QString::fromStdString(o.getPhone3()));
+    editMgsaTicketNumber->setText(QString::fromStdString(o.getMgsaTicketNumber()));
+    editMgsaTicketIssueDate->setText(QString::fromStdString(o.getMgsaTicketIssueDate()));
+    editPassportSeries->setText(QString::fromStdString(o.getPassportSeries()));
+    editPassportNumber->setText(QString::fromStdString(o.getPassportNumber()));
+    editPassportIssuedBy->setText(QString::fromStdString(o.getPassportIssuedBy()));
+    editPassportIssueDate->setText(QString::fromStdString(o.getPassportIssueDate()));
+    editVehicleBrand->setText(QString::fromStdString(o.getVehicleBrand()));
+    editVehiclePlate->setText(QString::fromStdString(o.getVehiclePlate()));
+    editVehicleYear->setText(o.getVehicleYear() != 0 ? QString::number(o.getVehicleYear()) : "");
+    checkPensioner->setChecked(o.isPensioner());
+    checkDisabled->setChecked(o.isDisabled());
+    editNotes->setPlainText(QString::fromStdString(spot.getNotes()));
 }
 
 // ============================================================================
-// Получение объекта Mesto из полей диалога
+// Получение Spot из полей
 // ============================================================================
 
-Mesto MestoDialog::getMesto() const
+Spot SpotDialog::getSpot() const
 {
-    return Mesto(editPlace->text().toInt(), editLastName->text().toStdString(), editFirstName->text().toStdString(),
-                 editMiddleName->text().toStdString(), editBirthDate->text().toStdString(),
-                 editRegistrationAddress->toPlainText().toStdString(), editActualAddress->toPlainText().toStdString(),
-                 editPhone1->text().toStdString(), editPhone2->text().toStdString(), editPhone3->text().toStdString(),
-                 editMgsaTicketNumber->text().toStdString(), editMgsaTicketIssueDate->text().toStdString(),
-                 editPassportSeries->text().toStdString(), editPassportNumber->text().toStdString(),
-                 editPassportIssuedBy->text().toStdString(), editPassportIssueDate->text().toStdString(),
-                 editVehicleBrand->text().toStdString(), editVehiclePlate->text().toStdString(),
-                 editVehicleYear->text().toInt(), checkPensioner->isChecked(), checkDisabled->isChecked(),
-                 editNotes->toPlainText().toStdString());
+    Owner owner(editLastName->text().toStdString(), editFirstName->text().toStdString(),
+                editMiddleName->text().toStdString(), editBirthDate->text().toStdString(),
+                editRegistrationAddress->toPlainText().toStdString(), editActualAddress->toPlainText().toStdString(),
+                editPhone1->text().toStdString(), editPhone2->text().toStdString(), editPhone3->text().toStdString(),
+                editMgsaTicketNumber->text().toStdString(), editMgsaTicketIssueDate->text().toStdString(),
+                editPassportSeries->text().toStdString(), editPassportNumber->text().toStdString(),
+                editPassportIssuedBy->text().toStdString(), editPassportIssueDate->text().toStdString(),
+                editVehicleBrand->text().toStdString(), editVehiclePlate->text().toStdString(),
+                editVehicleYear->text().toInt(), checkPensioner->isChecked(), checkDisabled->isChecked());
+
+    return Spot(editId->text().toInt(), std::move(owner), editNotes->toPlainText().toStdString());
 }
 
 // ============================================================================
 // Режим "только чтение"
 // ============================================================================
 
-void MestoDialog::setReadOnly(bool readOnly)
+void SpotDialog::setReadOnly(bool readOnly)
 {
-    editPlace->setReadOnly(readOnly);
+    editId->setReadOnly(readOnly);
     editLastName->setReadOnly(readOnly);
     editFirstName->setReadOnly(readOnly);
     editMiddleName->setReadOnly(readOnly);

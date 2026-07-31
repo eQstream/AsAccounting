@@ -11,10 +11,15 @@ find_package(Qt6 REQUIRED COMPONENTS Core Sql Widgets)
 
 set(SOURCES
     src/main.cpp
-    src/Mesto.cpp
-    src/database/Database.cpp
+    src/domain/Owner.cpp
+    src/domain/Spot.cpp
+    src/domain/User.cpp
+    src/domain/AuthService.cpp
+    src/infrastructure/SqliteSpotRepository.cpp
+    src/infrastructure/SqliteUserRepository.cpp
+    src/application/SpotService.cpp
     src/ui/MainWindow.cpp
-    src/ui/MestoDialog.cpp
+    src/ui/SpotDialog.cpp
 )
 
 add_executable(asaccounting ${SOURCES})
