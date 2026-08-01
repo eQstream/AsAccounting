@@ -7,13 +7,18 @@
 #include "ui/LoginDialog.h"
 #include "ui/MainWindow.h"
 #include <QApplication>
+
+#ifdef _WIN32
 #include <windows.h>
+#endif
 
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+#ifdef _WIN32
     SetConsoleOutputCP(65001);
+#endif
 
     SqliteSpotRepository spotRepo("asaccounting.db");
     SpotService spotService(spotRepo);

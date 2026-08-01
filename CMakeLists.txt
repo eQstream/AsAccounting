@@ -6,7 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_AUTOMOC ON)
 
-set(CMAKE_PREFIX_PATH "C:/msys64/mingw64/qt6-static")
+if(MINGW)
+    set(CMAKE_PREFIX_PATH "C:/msys64/mingw64/qt6-static")
+endif()
 find_package(Qt6 REQUIRED COMPONENTS Core Sql Widgets)
 
 set(SOURCES
@@ -27,6 +29,11 @@ add_executable(asaccounting ${SOURCES})
 target_include_directories(asaccounting PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(asaccounting PRIVATE Qt6::Core Qt6::Sql Qt6::Widgets)
 
+# Windows-specific: encode string literals as UTF-8
 if(MINGW)
     target_compile_options(asaccounting PRIVATE -fexec-charset=UTF-8)
 endif()
+
+# Optional: link native sqlite3 if not relying solely on Qt's SQLite plugin
+# find_package(SQLite3 REQUIRED)
+# target_link_libraries(asaccounting PRIVATE SQLite::SQLite3)
