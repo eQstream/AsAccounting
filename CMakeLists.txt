@@ -6,12 +6,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_AUTOMOC ON)
 
-if(MINGW)
-    set(CMAKE_PREFIX_PATH "C:/msys64/mingw64/qt6-static")
+# --- Force dynamic system Qt6 (skip Qt6-static) ---
+if(UNIX AND NOT APPLE)
+    # Linux: prefer system Qt6 over custom static builds
+    if(NOT CMAKE_PREFIX_PATH MATCHES "^/usr(;|$)")
+        set(CMAKE_PREFIX_PATH "/usr;${CMAKE_PREFIX_PATH}")
+    endif()
+elseif(WIN32)
+    # Windows/MinGW: don't force any prefix, let user set QT_DIR or use qmake
+    # System Qt6 on MSYS2 will be found automatically
 endif()
+
 find_package(Qt6 REQUIRED COMPONENTS Core Sql Widgets)
 
-set(SOURCES
+add_executable(asaccounting
     src/main.cpp
     src/domain/Owner.cpp
     src/domain/Spot.cpp
@@ -24,8 +32,6 @@ set(SOURCES
     src/ui/SpotDialog.cpp
     src/ui/LoginDialog.cpp
 )
-
-add_executable(asaccounting ${SOURCES})
 target_include_directories(asaccounting PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(asaccounting PRIVATE Qt6::Core Qt6::Sql Qt6::Widgets)
 
