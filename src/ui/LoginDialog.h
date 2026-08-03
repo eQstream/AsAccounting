@@ -4,7 +4,6 @@
 #include <QDialog>
 #include <optional>
 
-
 class QLineEdit;
 class QLabel;
 class QComboBox;
